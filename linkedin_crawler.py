@@ -3,8 +3,8 @@ import urllib3
 import requests
 
 def main():
-	API_KEY = '862ldul9drgoii'
-	API_SECRET = '7so2Xj12hLDozNUg'
+	API_KEY = 'xxxxxxxxxxxx'
+	API_SECRET = 'xxxxxxxxxxx'
 	RETURN_URL = 'http://localhost:8000'
 	http = urllib3.PoolManager()
 	accessTokenLink='https://www.linkedin.com/oauth/v2/accessToken'
