@@ -1,0 +1,7 @@
+1) Install linkedin python SDK
+
+$ pip install python-linkedin-v2
+
+2) Install urllib3
+
+pip install urllib3
