@@ -27,11 +27,17 @@ def create_edges(v_names,v_ids,api):
 	"""
 	Create edges between v_ids
 	"""
+	edges=[]
 	for v in v_ids:
 		following_list=api.GetFriendIDs(user_id=v)
 		print(following_list)
 		print('############################################')
+		for f in following_list:
+			if f in v_ids:
+				edges.append((v,f))
 
+	return edges			
+	
 def get_all_data(api):
 	"""
 	Uses twitter api to get following data 
