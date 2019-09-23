@@ -16,6 +16,16 @@ def main():
 	v_names=list(set(v_names))	
 	v_ids=list(set(v_ids))
 
+	id_name_map={}
+	for i in range(0,len(v_names)):
+		id_name_map[v_ids[i]]=v_names[i]
+
+	file=open('id_name_map.pickle','wb')
+	pickle.dump(id_name_map,file)
+
+	print(id_name_map)
+	print(len(id_name_map))
+
 	G=create_social_network_graph(v_names,v_ids,edges)
 	
 	nx.draw_networkx(G,node_color='red',font_color='black')
@@ -40,6 +50,6 @@ def create_social_network_graph(v_names,v_ids,edges):
 			G.add_edge(node1,node2)
 
 	return G
-	
+
 if __name__ == '__main__':
 		main()	
