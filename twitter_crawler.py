@@ -12,7 +12,7 @@ def main():
                   access_token_key=config['token_key'],
                   access_token_secret=config['token_secret'])
 
-	# api.sleep_on_rate_limit= True
+	api.sleep_on_rate_limit= True
 	
 	f=open("v_names.pickle","rb")
 	v_names=pickle.load(f)
@@ -23,22 +23,30 @@ def main():
 	v_names=list(set(v_names))	
 	v_ids=list(set(v_ids))	
 	
+	# f=open('edges.pickle','rb')
+	# edges=pickle.load(f)
 	edges=create_edges(v_names=v_names,v_ids=v_ids,api=api)
-	print(edges)
+	
+	print(len(v_ids))
+	print(len(edges))
 
 def create_edges(v_names,v_ids,api):
 	"""
 	Create edges between v_ids
 	"""
-	edges={}
+	f=open('edges.pickle','rb')
+	edges=pickle.load(f)
+	
 	try:
 		
 		for v in v_ids:
-			following_list=api.GetFriendIDs(user_id=v)
-			edges[v]=list(set(v_ids).intersection(set(following_list)))
-			print(following_list)
-			print('#####################################')
-	
+			if v not in edges.keys():
+				following_list=api.GetFriendIDs(user_id=v)
+				edges[v]=list(set(v_ids).intersection(set(following_list)))
+				# print(following_list)
+				print('#####################################')
+				print(len(edges))
+				
 	except Exception as error:	
 		print(error)
 		f = open("edges.pickle", "wb")
