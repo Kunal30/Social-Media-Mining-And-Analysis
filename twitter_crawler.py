@@ -23,8 +23,8 @@ def main():
 	v_names=list(set(v_names))	
 	v_ids=list(set(v_ids))	
 	
-	# f=open('edges.pickle','rb')
-	# edges=pickle.load(f)
+	f=open('edges.pickle','rb')
+	edges=pickle.load(f)
 	edges=create_edges(v_names=v_names,v_ids=v_ids,api=api)
 	
 	print(len(v_ids))
@@ -51,6 +51,9 @@ def create_edges(v_names,v_ids,api):
 		print(error)
 		f = open("edges.pickle", "wb")
 		pickle.dump(edges,f)	
+	
+	f = open("edges.pickle", "wb")
+	pickle.dump(edges,f)
 	
 	return edges			
 	

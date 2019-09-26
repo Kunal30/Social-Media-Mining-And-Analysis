@@ -2,9 +2,13 @@ import pickle
 import networkx as nx
 import warnings
 import matplotlib.pyplot as plt
+import collections
+import plotly.express as px
+import pandas as pd
+import plotly.graph_objects as go
 
 def main():
-	print('Visualizer Running....')
+	print('Network Measures Visualizer Running....')
 	file=open('../v_ids.pickle','rb')
 	v_ids=pickle.load(file)
 	file=open('../v_names.pickle','rb')
@@ -16,20 +20,57 @@ def main():
 	v_names=list(set(v_names))	
 	v_ids=list(set(v_ids))
 
-	id_name_map={}
-	for i in range(0,len(v_names)):
-		id_name_map[v_ids[i]]=v_names[i]
-
-	file=open('id_name_map.pickle','wb')
-	pickle.dump(id_name_map,file)
-
-	print(id_name_map)
-	print(len(id_name_map))
-
 	G=create_social_network_graph(v_names,v_ids,edges)
+
+	#Measure 1
+	display_degree_distribution(G)
 	
-	nx.draw_networkx(G,node_color='red',font_color='black')
-	plt.show()
+	#Measure 2
+	closeness_centrality(G)
+
+	#Measure 3
+	betweeness_centrality(G)
+
+def display_degree_distribution(G):
+	"""
+	Calculates degree distribution and 
+	displays it as a Histogram
+	"""
+	degree_sequence = sorted([d for n, d in G.degree()], reverse=True)
+	degreeCount = collections.Counter(degree_sequence)
+	deg, cnt = zip(*degreeCount.items())	
+	df=pd.DataFrame.from_dict(degreeCount,orient='index').reset_index()
+	df=df.rename(columns={"index":"Degree",0:"Count"})
+	
+	fig=px.bar(df,x='Degree',y='Count',title='Degree Distribution Histogram')
+	fig.show()	
+
+def closeness_centrality(G):
+	"""
+	Calculates closeness centrality and 
+	displays it as a Histogram
+	"""
+	cc=nx.closeness_centrality(G=G)
+	df=pd.DataFrame.from_dict(cc,orient='index').reset_index()
+	df=df.rename(columns={"index":"TwitterID",0:"Closeness"})
+	fig=px.bar(df,y='Closeness',title='Closeness Centrality Histogram')
+	fig.show()		
+
+def betweeness_centrality(G):
+	"""
+	Calculates closeness centrality and 
+	displays it as a Histogram
+	"""
+	bc=nx.betweenness_centrality(G=G)
+	count=0
+	ids=[]
+	bc_list=[]
+	for i in bc.keys():
+		ids.append(count)
+		bc_list.append(bc[i])
+
+	fig = go.Figure([go.Bar(x=ids, y=bc_list)])
+	fig.show()	
 
 def create_social_network_graph(v_names,v_ids,edges):
 	"""
